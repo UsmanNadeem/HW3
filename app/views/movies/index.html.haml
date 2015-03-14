@@ -4,9 +4,9 @@
 %table#movies
   %thead
     %tr
-      %th= link_to "Movie Title", movies_path(:sort_by=>"title", :ratings=>params[:ratings]), id: @clicked["title"]
-      %th= link_to "Rating", movies_path(:sort_by=>"rating", :ratings=>params[:ratings]), id: @clicked["rating"]
-      %th= link_to "Release Date", movies_path(:sort_by=>"release_date", :ratings=>params[:ratings]), id: @clicked["release_date"]
+      %th= link_to "Movie Title", movies_path(:sort_by=>"title"), id: session[:sort_by]["title"]
+      %th= link_to "Rating", movies_path(:sort_by=>"rating"), id: session[:sort_by]["rating"]
+      %th= link_to "Release Date", movies_path(:sort_by=>"release_date"), id: session[:sort_by]["release_date"]
       %th More Info
   %tbody
     - @movies.each do |movie|
@@ -17,10 +17,9 @@
         %td= link_to "More about #{movie.title}", movie_path(movie)
 
 = form_tag movies_path, :method=>:get, :id=>"ratings_form" do
-  = hidden_field_tag :sort_by, params[:sort_by]
   Include:
   - @all_ratings.each do |rating|
     = rating
-    = check_box_tag "ratings[#{rating}]", "1", params[:ratings][rating] == "1" ? true : false, id: "ratings_#{rating}"
+    = check_box_tag "ratings[#{rating}]", "1", session[:ratings][rating] == "1" ? true : false, id: "ratings_#{rating}"
   = submit_tag 'Refresh', id: "ratings_submit"
 = link_to 'Add new movie', new_movie_path 

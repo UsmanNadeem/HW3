@@ -3,14 +3,18 @@ class MoviesController < ApplicationController
 
   def index
     @all_ratings = Movie.all_ratings
-    @clicked = {params[:sort_by] => "hilite"}
 
-    if params[:ratings] == nil 
-      params[:ratings]=Hash.new
-      @all_ratings.each { |key| params[:ratings][key] = "1" }
+    session[:sort_by] = Hash.new unless session[:sort_by] != nil
+    session[:sort_by] = {params[:sort_by] => "hilite"}  unless params[:sort_by] == nil
+
+    if params[:ratings] == nil && session[:ratings] == nil
+      session[:ratings]=Hash.new
+      @all_ratings.each { |key| session[:ratings][key] = "1" }
+    elsif params[:ratings] != nil
+      session[:ratings] = params[:ratings]
     end
 
-    @movies = Movie.find_all_by_rating    params[:ratings].keys,  :order => params[:sort_by]
+    @movies = Movie.find_all_by_rating session[:ratings].keys, :order => session[:sort_by].keys
   end
 
   def show
