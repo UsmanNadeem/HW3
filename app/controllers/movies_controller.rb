@@ -2,9 +2,16 @@
 class MoviesController < ApplicationController
 
   def index
-    @movies = Movie.all :order => params[:sort_by]
-    @clicked = {params[:sort_by] => "hilite"}
     @all_ratings = Movie.all_ratings
+    @clicked = {params[:sort_by] => "hilite"}
+
+    if params[:ratings] != nil
+      ratings = []
+      params[:ratings].each_key {|x| ratings << x}
+      @movies = Movie.find_all_by_rating ratings,  :order => params[:sort_by]
+    else
+      @movies = Movie.all :order => params[:sort_by]
+    end
   end
 
   def show
