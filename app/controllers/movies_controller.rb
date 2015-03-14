@@ -5,13 +5,12 @@ class MoviesController < ApplicationController
     @all_ratings = Movie.all_ratings
     @clicked = {params[:sort_by] => "hilite"}
 
-    if params[:ratings] != nil
-      ratings = []
-      params[:ratings].each_key {|x| ratings << x}
-      @movies = Movie.find_all_by_rating ratings,  :order => params[:sort_by]
-    else
-      @movies = Movie.all :order => params[:sort_by]
+    if params[:ratings] == nil 
+      params[:ratings]=Hash.new
+      @all_ratings.each { |key| params[:ratings][key] = "1" }
     end
+
+    @movies = Movie.find_all_by_rating    params[:ratings].keys,  :order => params[:sort_by]
   end
 
   def show
