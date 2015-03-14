@@ -4,7 +4,6 @@ class MoviesController < ApplicationController
   def index
     @movies = Movie.all :order => params[:sort_by]
     @clicked = {params[:sort_by] => "hilite"}
-    @all_ratings = Movie.all_ratings
   end
 
   def show
