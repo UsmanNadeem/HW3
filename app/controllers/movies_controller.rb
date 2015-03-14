@@ -3,6 +3,7 @@ class MoviesController < ApplicationController
 
   def index
     @movies = Movie.all :order => params[:sort_by]
+    @clicked = {params[:sort_by] => "hilite"}
   end
 
   def show
