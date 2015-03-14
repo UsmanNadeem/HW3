@@ -5,13 +5,19 @@ class MoviesController < ApplicationController
     @all_ratings = Movie.all_ratings
 
     session[:sort_by] = Hash.new unless session[:sort_by] != nil
-    session[:sort_by] = {params[:sort_by] => "hilite"}  unless params[:sort_by] == nil
-
+    if params[:sort_by] != nil
+      session[:sort_by] = {params[:sort_by] => "hilite"}   
+      flash.keep
+      redirect_to movies_path
+    end
+    
     if params[:ratings] == nil && session[:ratings] == nil
       session[:ratings]=Hash.new
       @all_ratings.each { |key| session[:ratings][key] = "1" }
     elsif params[:ratings] != nil
       session[:ratings] = params[:ratings]
+      flash.keep
+      redirect_to movies_path
     end
 
     @movies = Movie.find_all_by_rating session[:ratings].keys, :order => session[:sort_by].keys
